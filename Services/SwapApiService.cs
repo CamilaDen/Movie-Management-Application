@@ -18,22 +18,31 @@ namespace Services
             var list = await _httpClient.GetFromJsonAsync<SwapiResponse<Film>>("films");
             if (list?.Result == null)
                 return new List<Movie>();
-            var response = MapFilmsToMovies(list);
+            var response = list.Result.Select(MapFilmToMovie).ToList();
             return response;
         }
 
-        private List<Movie> MapFilmsToMovies(SwapiResponse<Film> films)
+        public async Task<Movie> GetMovieAsync(int id)
         {
-            return films.Result.Select(f => new Movie
+            var response = await _httpClient.GetFromJsonAsync<SwapiSingleResponse<Film>>($"films/{id}");
+            if (response.Result == null)
+                return null;
+            var movie = MapFilmToMovie(response.Result);
+            return movie;
+        }
+
+        private Movie MapFilmToMovie(Film film)
+        {
+            return new Movie
             {
-                Title = f.Properties.Title,
-                EpisodeId = f.Properties.Episode_Id,
-                Director = f.Properties.Director,
-                Producer = f.Properties.Producer,
-                ReleaseDate = DateTime.Parse(f.Properties.Release_Date),
-                OpeningCrawl = f.Properties.Opening_Crawl,
-                Description = f.Properties.Description
-            }).ToList();
+                Title = film.Properties.Title,
+                EpisodeId = film.Properties.Episode_Id,
+                Director = film.Properties.Director,
+                Producer = film.Properties.Producer,
+                ReleaseDate = DateTime.Parse(film.Properties.Release_Date),
+                OpeningCrawl = film.Properties.Opening_Crawl,
+                Description = film.Properties.Description
+            };
         }
     }
 }

@@ -39,13 +39,14 @@ namespace MovieManagementApp.Controllers
         /// <response code="404">If the movie was not found</response>
         /// <response code="403">If the user is not authorized</response>
         [HttpGet("{id}")]
-        [Authorize(Roles = "RegularUser")]
+        [Authorize(Roles = "Regular")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetMovie(int id)
         {
-            return Ok();
+            var response = _swapApiService.GetMovieAsync(id).Result;
+            return Ok(response);
         }
 
         /// <summary>
