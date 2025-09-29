@@ -7,5 +7,7 @@ namespace Services.Interfaces
         Task<Movie> CreateMovieAsync(Movie movie);
         Task<bool> UpdateMovieAsync(Movie movie);
         Task<bool> DeleteMovieAsync(int id);
+        Task<Movie?> GetMovieByIdAsync(int id);
+        Task<List<Movie>> GetAllMoviesAsync();
     }
 }

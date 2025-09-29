@@ -1,14 +1,18 @@
-﻿namespace Models.Entities
+﻿using Models.Enums;
+
+namespace Models.Entities
 {
     public class Movie
     {
         public int Id { get; set; }
-        public string Title { get; set; } = default!;
+        public int? ExternalId { get; set; }
+        public string Title { get; set; } = string.Empty;
         public int EpisodeId { get; set; }
-        public string Director { get; set; } = default!;
-        public string Producer { get; set; } = default!;
+        public string Director { get; set; } = string.Empty;
+        public string Producer { get; set; } = string.Empty;
         public DateTime ReleaseDate { get; set; }
-        public string OpeningCrawl { get; set; } = default!;
-        public string Description { get; set; } = default!;
+        public string OpeningCrawl { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public MovieStatus Status { get; set; } = MovieStatus.Active;
     }
 }

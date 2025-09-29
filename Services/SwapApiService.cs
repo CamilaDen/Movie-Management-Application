@@ -12,7 +12,6 @@ namespace Services
         {
             _httpClient = httpClient;
         }
-
         public async Task<List<Movie>> GetFilmsAsync()
         {
             var list = await _httpClient.GetFromJsonAsync<SwapiResponse<Film>>("films");
@@ -35,6 +34,7 @@ namespace Services
         {
             return new Movie
             {
+                ExternalId = int.Parse(film.Uid),
                 Title = film.Properties.Title,
                 EpisodeId = film.Properties.Episode_Id,
                 Director = film.Properties.Director,

@@ -9,5 +9,6 @@ namespace Repository.Interfaces
         Task<bool> DeleteAsync(int id);
         Task<Movie?> GetByIdAsync(int id);
         Task<List<Movie>> GetAllAsync();
+        Task<Movie?> GetByExternalIdAsync(int externalId);
     }
 }

@@ -41,6 +41,9 @@ namespace Repository.Migrations
                     b.Property<int>("EpisodeId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ExternalId")
+                        .HasColumnType("int");
+
                     b.Property<string>("OpeningCrawl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -51,6 +54,9 @@ namespace Repository.Migrations
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()

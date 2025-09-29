@@ -34,6 +34,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<JWTAuthorization>();
+builder.Services.AddScoped<IMovieSyncService, MovieSyncService>();
 
 builder.Services.AddHttpClient<ISwapApiService, SwapApiService>(client =>
 {

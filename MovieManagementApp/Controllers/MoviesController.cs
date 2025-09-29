@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 using Services.Interfaces;
@@ -12,11 +11,13 @@ namespace MovieManagementApp.Controllers
     {
         private ISwapApiService _swapApiService;
         private IMovieService _movieService;
+        private IMovieSyncService _syncService;
 
-        public MoviesController(ISwapApiService swapApiService, IMovieService movieService)
+        public MoviesController(ISwapApiService swapApiService, IMovieService movieService, IMovieSyncService movieSyncService)
         {
             _swapApiService = swapApiService;
             _movieService = movieService;
+            _syncService = movieSyncService;
         }
 
         /// <summary>
@@ -30,8 +31,8 @@ namespace MovieManagementApp.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetMovies()
         {
-            var response = _swapApiService.GetFilmsAsync().Result;
-            return Ok(response);
+            var movies = await _movieService.GetAllMoviesAsync();
+            return Ok(movies);
         }
 
         /// <summary>
@@ -49,8 +50,11 @@ namespace MovieManagementApp.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetMovie(int id)
         {
-            var response = _swapApiService.GetMovieAsync(id).Result;
-            return Ok(response);
+            var movie = await _movieService.GetMovieByIdAsync(id);
+            if (movie == null)
+                return NotFound();
+                
+            return Ok(movie);
         }
 
         /// <summary>
@@ -142,7 +146,8 @@ namespace MovieManagementApp.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SyncStarWarsMovies()
         {
-            return Ok();
+            var count = await _syncService.SyncMoviesAsync();
+            return Ok(new { Message = $"Sync completed. {count} movies processed." });
         }
     }
 }

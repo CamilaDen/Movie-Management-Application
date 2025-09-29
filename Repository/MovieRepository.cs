@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models.Entities;
+using Models.Enums;
 using Repository.Interfaces;
 
 namespace Repository
@@ -35,19 +36,29 @@ namespace Repository
             var movie = await _context.Movies.FindAsync(id);
             if (movie == null) return false;
 
-            _context.Movies.Remove(movie);
-            var deletedRows = await _context.SaveChangesAsync();
-            return deletedRows > 0;
+            movie.Status = MovieStatus.Inactive;
+            _context.Movies.Update(movie);
+            var updatedRows = await _context.SaveChangesAsync();
+            return updatedRows > 0;
         }
 
         public async Task<Movie?> GetByIdAsync(int id)
         {
-            return await _context.Movies.FindAsync(id);
+            return await _context.Movies
+                .Where(m => m.Id == id && m.Status == MovieStatus.Active)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<List<Movie>> GetAllAsync()
         {
-            return await _context.Movies.ToListAsync();
+            return await _context.Movies
+                .Where(m => m.Status == MovieStatus.Active)
+                .ToListAsync();
+        }
+
+        public Task<Movie?> GetByExternalIdAsync(int externalId)
+        {
+            return _context.Movies.FirstOrDefaultAsync(m => m.ExternalId == externalId);
         }
     }
 }
