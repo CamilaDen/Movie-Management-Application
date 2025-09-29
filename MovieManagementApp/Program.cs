@@ -33,6 +33,12 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<JWTAuthorization>();
 
+builder.Services.AddHttpClient<ISwapApiService, SwapApiService>(client =>
+{
+    client.BaseAddress = new Uri("https://www.swapi.tech/api/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
 {
     o.TokenValidationParameters = new TokenValidationParameters()
