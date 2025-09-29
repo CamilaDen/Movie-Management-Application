@@ -1,9 +1,7 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-using Models.Entities;
+﻿using Models.Entities;
 using Models.Enums;
-using Service.Authorization;
 using Repository.Interfaces;
+using Service.Authorization;
 using Services.Interfaces;
 
 namespace Services
@@ -40,32 +38,20 @@ namespace Services
             var user = new User
             {
                 Email = email,
-                PasswordHash = HashPassword(password),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
                 Role = role
             };
 
             return await _userRepository.CreateAsync(user);
         }
 
-        public async Task<bool> UpdateUserRoleAsync(Guid userId, UserRole newRole)
+        public async Task<bool> UpdateUserRoleAsync(int userId, UserRole newRole)
         {
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null) return false;
 
             user.Role = newRole;
             return await _userRepository.UpdateAsync(user);
-        }
-
-        public async Task<User?> GetUserByIdAsync(Guid id)
-        {
-            return await _userRepository.GetByIdAsync(id);
-        }
-
-        private static string HashPassword(string password)
-        {
-            using var sha256 = SHA256.Create();
-            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return Convert.ToBase64String(hashedBytes);
         }
     }
 }

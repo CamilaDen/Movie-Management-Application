@@ -7,7 +7,6 @@ namespace Services.Interfaces
     {
         Task<(User? User, string? Token)> LoginAsync(string email, string password);
         Task<User> RegisterAsync(string email, string password, UserRole role = UserRole.Regular);
-        Task<bool> UpdateUserRoleAsync(Guid userId, UserRole newRole);
-        Task<User?> GetUserByIdAsync(Guid id);
+        Task<bool> UpdateUserRoleAsync(int userId, UserRole newRole);
     }
 }
