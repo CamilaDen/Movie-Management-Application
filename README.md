@@ -1,4 +1,4 @@
-# -Movie-Management-Application
+# Movie-Management-Application
 API para la gestión de películas desarrollada en **.NET 8**, siguiendo una arquitectura en capas.  
 Permite administrar películas, sincronizar información desde una API externa y exponer endpoints protegidos con JWT.
 
